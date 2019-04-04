@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dhvanil's Rubik's Cube</title>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      attribute vec4 vPosition;
+      attribute vec4 vColor;
+      varying vec4 fColor;
+
+      uniform mat4 projectionMatrix;
+      uniform mat4 modelViewMatrix;
+
+      void main() {
+          fColor = vColor;
+          gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+      }
+    </script>
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+
+      varying vec4 fColor;
+
+      void main () {
+        gl_FragColor = fColor;
+      }
+    </script>
+    <script type="text/javascript" src="./utils/MV.js"></script>
+    <script type="text/javascript" src="./utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="./utils/initShaders.js"></script>
+    <script type="text/javascript" src="global.js"></script>
+    <script type="text/javascript" src="rotate.js"></script>
+    <script type="text/javascript" src="events.js"></script>
+    <script type="text/javascript" src="inputs.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 99%;
+      }
+
+      td,
+      th {
+        border: 3px solid #000000;
+        text-align: center;
+        padding: 2px;
+      }
+
+      p {
+        font-family: arial, sans-serif;
+        font-size: 10;
+      }
+
+      h1 {
+        font-family: arial, sans-serif;
+      }
+
+      button {
+        font-family: arial, sans-serif;
+      }
+
+      .btn-group button {
+        background-color: #0066ff; /* Green background */
+        border: 1px solid blue; /* Green border */
+        color: white; /* White text */
+        padding: 10px 24px; /* Some padding */
+        cursor: pointer; /* Pointer/hand icon */
+        float: center; /* Float the buttons side by side */
+      }
+
+      .btn-group button:not(:last-child) {
+        border-right: none; /* Prevent double borders */
+      }
+
+      /* Clear floats (clearfix hack) */
+      .btn-group:after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+
+      /* Add a background color on hover */
+      .btn-group button:hover {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="left" style="float: left; width: 50%;">
+      <canvas id="glCanvas">
+        Oops, your browser doesn't support the HTML5 canvas element
+      </canvas>
+      <div>
+        <p>Enter a postive integer below to randomize the cube</p>
+        <input id="random-count" />
+        <button id="randomize">RANDOMIZE!</button>
+      </div>
+      <div>
+        <p>
+          Copy/Paste Save Text to/from the text box below. <br />
+          On certain browsers, load saved state from the browser's storage
+        </p>
+        <textarea id="state" rows="5" cols="70"></textarea>
+        <br />
+        <button id="save-state">SAVE STATE</button>
+        <button id="load-state">LOAD STATE</button>
+        <button id="load-state-browser">LOAD STATE FROM BROWSER</button>
+      </div>
+    </div>
+    <div id="right" style="float: right; width: 50%;">
+      <h1>INSTRUCTIONS:</h1>
+      <p>
+        To move the camera, drag around the cube or use the arrow keys. <br />
+        <br />
+        To rotate the planes use the buttons below. Hold the SPACEBAR to invert
+        the move.
+      </p>
+      <div
+        style="align-content: center; width: 100%; align-items: center; margin-left: 25%"
+      >
+        <div class="btn-group">
+          <button id="1">Left</button>
+          <button id="2">Middle</button>
+          <button id="3">Right</button>
+        </div>
+        <br />
+        <div class="btn-group">
+          <button id="4">Top</button>
+          <button id="5">Middle</button>
+          <button id="6">Bottom</button>
+        </div>
+        <br />
+        <div class="btn-group">
+          <button id="7">Front</button>
+          <button id="8">Center</button>
+          <button id="9">Back</button>
+        </div>
+      </div>
+      <div>
+        <h1>CUBE STATUS: <break id="status"></break></h1>
+      </div>
+      <p>
+        The keyboard interface is set up as a cube. Again, hold the SPACEBAR to
+        alter movements. Try out these movements to get the hang of it.
+      </p>
+      <div>
+        <p style="float: left; padding-left: 20px">
+          W = LEFT COLUMN BACK <br />
+          E = MIDDLE COLUMN BACK <br />
+          R = RIGHT COLUMN BACK <br />
+          <br />
+          S = FRONT FACE CW<br />
+          D = CENTER FACE CW<br />
+          F = BACK FACE CW<br />
+          <br />
+          X = LEFT COLUMN FORWARD<br />
+          C = MIDDLE COLUMN FORWARD<br />
+          V = RIGHT COLUMN FORWARD<br />
+        </p>
+        <p style="float: right; padding-right: 20px">
+          Space + W = TOP ROW LEFT <br />
+          Space + S = MIDDLE ROW LEFT <br />
+          Space + X = BOTTOM ROW LEFT <br />
+          <br />
+          Space + E = FRONT FACE CCW<br />
+          Space + D = CENTER FACE CCW<br />
+          Space + C = BACK FACE CCW<br />
+          <br />
+          Space + R = TOP ROW RIGHT<br />
+          Space + F = MIDDLE ROW RIGHT<br />
+          Space + V = BOTTOM ROW RIGHT<br />
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
